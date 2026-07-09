@@ -1,5 +1,6 @@
+from phibuilder.widgets import M3Button, M3Label, M3StackedWidget
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QStackedWidget, QLabel,
+    QWidget, QHBoxLayout, QVBoxLayout, QPushButton,
 )
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont
@@ -63,7 +64,7 @@ class HubWindow(QWidget):
         sb_layout.setSpacing(5)
 
         # User info in sidebar
-        self._user_label = QLabel(session.full_name or "Utilisateur")
+        self._user_label = M3Label(session.full_name or "Utilisateur")
         self._user_label.setStyleSheet(f"""
             font-size: 13px; font-weight: bold;
             color: {theme_manager.palette.text_strong};
@@ -78,14 +79,14 @@ class HubWindow(QWidget):
             'SECR': 'Secrétaire',
             'PROF': 'Enseignant',
         }
-        self._role_label = QLabel(role_names.get(session.role.value, session.role.value))
+        self._role_label = M3Label(role_names.get(session.role.value, session.role.value))
         self._role_label.setStyleSheet(f"""
             font-size: 10px; color: {theme_manager.palette.text_secondary};
             padding: 0 5px 8px 5px;
         """)
         sb_layout.addWidget(self._role_label)
 
-        sep = QLabel()
+        sep = M3Label()
         sep.setFixedHeight(1)
         sep.setStyleSheet(f"background-color: {theme_manager.palette.border};")
         sb_layout.addWidget(sep)
@@ -99,7 +100,7 @@ class HubWindow(QWidget):
         layout.addWidget(self._sidebar)
 
         # Toggle button — always visible, between sidebar and content
-        self._toggle_btn = QPushButton("◀")
+        self._toggle_btn = M3Button("◀")
         self._toggle_btn.setFixedSize(21, 55)
         self._toggle_btn.setCursor(Qt.PointingHandCursor)
         self._toggle_btn.setStyleSheet(f"""
@@ -127,7 +128,7 @@ class HubWindow(QWidget):
         content_layout.setSpacing(0)
 
         # Header with section title
-        self._section_title = QLabel()
+        self._section_title = M3Label()
         self._section_title.setStyleSheet(f"""
             font-size: 16px; font-weight: bold;
             color: {theme_manager.palette.text_strong};
@@ -137,7 +138,7 @@ class HubWindow(QWidget):
         """)
         content_layout.addWidget(self._section_title)
 
-        self._stack = QStackedWidget()
+        self._stack = M3StackedWidget()
         content_layout.addWidget(self._stack, 1)
 
         layout.addWidget(content, 1)
@@ -241,7 +242,7 @@ class HubWindow(QWidget):
         except Exception as e:
             import traceback
             traceback.print_exc()
-            lbl = QLabel(f"Erreur de chargement : {e}")
+            lbl = M3Label(f"Erreur de chargement : {e}")
             lbl.setAlignment(Qt.AlignCenter)
             lbl.setStyleSheet("color: red; font-size: 13px;")
             idx = self._stack.indexOf(info['page'])

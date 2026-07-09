@@ -1,8 +1,8 @@
 import os
 from PySide6.QtGui import QPixmap, QFont
+from phibuilder.widgets import M3Button, M3Label, M3TextField, M3TabWidget
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
-    QTabWidget, QMessageBox,
+    QWidget, QVBoxLayout, QHBoxLayout, QMessageBox,
 )
 from PySide6.QtCore import Qt, QThread, Signal, QTimer
 
@@ -49,35 +49,35 @@ class LoginWindow(QWidget):
         logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
                                  '..', 'LarcSuperviseur', 'img', 'logoAEC.png')
         if os.path.exists(logo_path):
-            pix = QPixmap(logo_path).scaledToHeight(55, Qt.SmoothTransformation)
-            lbl = QLabel()
+            pix = QPixmap(logo_path).scaledToHeight(theme_manager.image.logo, Qt.SmoothTransformation)
+            lbl = M3Label()
             lbl.setPixmap(pix)
             lbl.setAlignment(Qt.AlignCenter)
             vbox.addWidget(lbl)
 
-        hdr = QLabel("LarcHub")
+        hdr = M3Label("LarcHub")
         hdr.setAlignment(Qt.AlignCenter)
         hdr.setStyleSheet(f"font-size: 21px; font-weight: bold; color: {theme_manager.palette.primary};")
         vbox.addWidget(hdr)
 
-        sub = QLabel("Supervision · Secrétariat · Coordination")
+        sub = M3Label("Supervision · Secrétariat · Coordination")
         sub.setAlignment(Qt.AlignCenter)
         sub.setStyleSheet(f"font-size: 11px; color: {theme_manager.palette.text_secondary};")
         vbox.addWidget(sub)
 
-        self._tabs = QTabWidget()
+        self._tabs = M3TabWidget()
         vbox.addWidget(self._tabs)
 
         self._tabs.addTab(self._tab_intranet(), "Intranet")
         self._tabs.addTab(self._tab_cloud(), "Cloud")
 
-        self._error = QLabel()
+        self._error = M3Label()
         self._error.setAlignment(Qt.AlignCenter)
         self._error.setStyleSheet(f"color: {theme_manager.palette.danger}; font-size: 11px;")
         self._error.setVisible(False)
         vbox.addWidget(self._error)
 
-        self._net_status = QLabel()
+        self._net_status = M3Label()
         self._net_status.setAlignment(Qt.AlignCenter)
         self._net_status.setStyleSheet(f"font-size: 10px; color: {theme_manager.palette.text_secondary};")
         vbox.addWidget(self._net_status)
@@ -87,20 +87,19 @@ class LoginWindow(QWidget):
         form = QVBoxLayout(w)
         form.setSpacing(8)
 
-        self._i_email = QLineEdit()
+        self._i_email = M3TextField()
         self._i_email.setPlaceholderText("Email @arc-en-ciel.org")
-        self._i_email.setFixedHeight(34)
-        self._i_email.setStyleSheet("padding: 0 12px;")
+        self._i_email.setFixedHeight(theme_manager.image.field_height)
         form.addWidget(self._i_email)
 
-        self._i_pass = QLineEdit()
-        self._i_pass.setEchoMode(QLineEdit.Password)
+        self._i_pass = M3TextField()
+        self._i_pass.setEchoMode(M3TextField().EchoMode.Password)
         self._i_pass.setPlaceholderText("Mot de passe")
-        self._i_pass.setFixedHeight(34)
-        self._i_pass.setStyleSheet("padding: 0 12px;")
+        self._i_pass.setFixedHeight(theme_manager.image.field_height)
         form.addWidget(self._i_pass)
 
-        btn = QPushButton("Connexion Intranet")
+        btn = M3Button("Connexion Intranet")
+        btn.setObjectName("btnIntra")
         btn.setFixedHeight(34)
         btn.clicked.connect(self._on_intranet)
         self._i_pass.returnPressed.connect(btn.click)
@@ -114,12 +113,13 @@ class LoginWindow(QWidget):
         form = QVBoxLayout(w)
         form.setSpacing(8)
 
-        lbl = QLabel("Connexion via Google Workspace @arc-en-ciel.org")
+        lbl = M3Label("Connexion via Google Workspace @arc-en-ciel.org")
         lbl.setWordWrap(True)
         lbl.setAlignment(Qt.AlignCenter)
         form.addWidget(lbl)
 
-        btn = QPushButton("Connexion Google")
+        btn = M3Button("Connexion Google")
+        btn.setObjectName("btnGoogle")
         btn.setFixedHeight(34)
         btn.clicked.connect(self._on_cloud)
         form.addWidget(btn)
